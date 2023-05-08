@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+
+    <body>
+
+        <div class="MainWrapper">
+
+            <h1>Failed<p style="display:block; font-size:small;">An internal server error occured, sorry!</p></h1>
+
+            <div class="returnWrapper">
+
+                <a href="{% url 'manage:index' account_id=request.POST.account_id %}">Return to Account</a>
+
+            </div>
+
+        </div>
+
+    </body>
+
+</html>

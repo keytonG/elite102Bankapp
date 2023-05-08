@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+
+        body {
+            background-color:rgb(234, 232, 232);
+            font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+        }
+
+        .nameParameterLengthAlert {
+            display: none;
+            color: black;
+            background-color: rgba(255, 0, 0, 0.5);
+            border: 2px solid rgba(255, 0, 0, 0.8);
+            border-radius: 20px;
+            width: 10%;
+        }
+
+        .TextInputField label {
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 16px;
+            color: #999;
+            pointer-events: none;
+            transition: all 0.2s ease-out;
+            transform: translate(10px, 16px) scale(1);
+            transform-origin: 0 0;
+        }
+
+        .TextInputField input {
+            margin:2px;
+            font-size: 16px;
+            padding: 20px 10px 10px;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            outline: none;
+            width:40%;
+        }
+
+        #inputField_fname {
+            display:inline-block;
+        }
+
+        #inputField_lname {
+            display:inline-block;
+        }
+
+        .loginRedirect {
+            text-decoration:none;
+            color: #1ec677;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #loginDialogueContainer {
+            width:30%;
+            margin:auto;
+            box-shadow: inset;
+            margin-top:10%;
+            background-color:white;
+            padding:20px;
+            border-radius:25px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, .6);
+        }
+
+        input {
+            appearance: textfield;
+            -webkit-appearance: textfield;
+            -moz-appearance: textfield;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type='submit'] {
+            border-radius:27px;
+            border:none;
+            background:#1ec677;
+            padding: 10px 40px 10px 40px;
+            margin-left:10%;
+            cursor:pointer;
+        }
+
+        input[type='submit']:hover {
+            background:#4bc38b;
+        }
+
+        ::placeholder {
+            font-size: 14px;
+            position: absolute;
+            top: 8px;
+            left: 12px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        input:focus::placeholder {
+            font-size: 12px;
+            top: 0;
+        }
+
+        #errorField {
+            display:none;
+            border:1px solid red;
+            border-radius:12px;
+        }
+    
+        .modal {
+            display:none;
+            position:fixed;
+            z-index: 1;
+            left:0;
+            top:0;
+            width:100%;
+            height:100%;
+            overflow:auto;
+            background-color:rgb(0,0,0);
+            background-color:rgba(0,0,0,0.4)
+        }
+
+        .modal-content {
+            background-color:#fefefe;
+            border-radius:25px;
+            margin:15% auto;
+            padding:20px;
+            border:1px solid #888;
+            width:25%;
+            box-shadow:0 2px 5px rgba(0,0,0,0.6);
+        }
+
+        .close {
+            color:#aaa;
+            float:right;
+            font-size:28px;
+            font-weight:bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color:black;
+            text-decoration:none;
+            cursor:pointer;
+        }
+    </style>
+  </head>
+  <body>
+
+    <div id="loginDialogueContainer">
+        <h1>Hi, what's your name?<br/><p style="display:block;font-size:small;">Let's start with some basic information.</p></h1>
+        <a class="loginRedirect" href="{% url 'login:login' %}" style="display:block;"><p>Already have an account?</p></a>
+        <div id="formWrapper">
+
+            {% if alert_accountAlreadyExists %}
+                <p>Account with that name already exists.</p>
+            {% endif %}
+
+            <form action="{% url 'login:signup' %}" method="POST" name="newuser">
+                {% csrf_token %}
+                    
+                <div class="TextInputField" id="InputField_fname">
+                    <input type="text" name="fname" id="fname" placeholder="First name">
+                </div>
+        
+                <div class="TextInputField" id="InputField_lname">
+                    <input type="text" name="lname" id="lname" placeholder="Last name">
+                </div>
+        
+                <div class="TextInputField" id="InputField_email">
+                    <input type="text" name="email" id="email" placeholder="Email">
+                </div>
+        
+                <div class="DateInputField TextInputField" id="InputField_date">
+                    <input type="text" name="dob" id="dob" placeholder="Date of birth" onfocus="this.type='date'">
+                </div>
+        
+                <div class="TextInputField" id="InputField_password">
+                    <input type="password" name="password" id="password" placeholder="Password">
+                </div>
+        
+                <div class="btn" id="btn_submit">
+                    <input type="submit">
+                </div>
+            </form>
+
+        </div>
+
+        <div id="errorModal" class="modal">
+            <div class="modal-content">
+                <h2 style="margin-bottom:0px;">Oops!</h2>
+                <h4 style="margin-top:0px;">There was a problem making your account:</h4>
+                <hr>
+                <span class="close">&times;</span>
+                {% if alert_nameLengthInvalid%}
+                    <p class="errorField" id="error_nameLength">Name must be more than 3 characters long.</p>
+                {% endif %}
+                {% if alert_passwordComplexityInvalid %}
+                    <p class="errorField" id="error_passwordComplexity">Password must: have 1 symbol, capital letter, and number, and be more than 6 characters long.</p>
+                {% endif %}
+                {% if alert_emailNotReal %}
+                    <p class="errorField" id="error_emailInvalid">Your email is invalid.</p>
+                {% endif %}
+                {% if alert_accountAlreadyExists %}
+                    <p class="errorField" id="error_accountAlreadyExists">An account with the same name already exists.</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    {% if errors %}
+
+        <script> //functions for error modal openner
+            const modal = document.querySelector(".modal");
+            modal.style.display="block";
+            const close = document.querySelector(".close");
+
+            close.onclick = function() {
+                modal.style.display="none"
+            };
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display="none"
+                }
+            }
+        </script>
+
+    {% endif %}
+
+    <script> //remaps enter key to submit button
+        document.onkeypress = keyPress;
+                    function keyPress(e) {
+                        var x = e || window.event;
+                        var key = (x.keyCode || x.which);
+                        if (key == 13 || key == 3){
+                            document.form_login.submit()
+                        }
+                    }
+    </script>
+
+  </body>
+</html>

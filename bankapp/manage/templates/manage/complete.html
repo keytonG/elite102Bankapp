@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+
+    </head>
+
+    <body>
+
+        <div class="mainWrapper">
+
+            <h1>Complete!<br/><p style="display:block; font-size:small;">The transaction was completed successfully.</p></h1>
+
+
+            <div class="returnWrapper">
+
+                <a href="{% url 'manage:index' account_id=request.POST.account_id %}">Return to Account</a>
+
+
+
+            </div>
+
+        </div>
+
+        
+
+    </body>
+
+</html>

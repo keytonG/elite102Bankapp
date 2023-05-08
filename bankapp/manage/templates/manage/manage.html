@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <style>
+
+            :root {
+                --background-bgc:rgb(234, 232, 232);
+                --foreground-obj-bgc:white;
+                --foreground-obj-border: rgba(194, 194, 194, 0.8);
+                --hover:rgb(224, 220, 220);
+            }
+
+            body {
+                background-color:var(--background-bgc);
+                font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+            }
+
+            .MainWrapper {
+                height:100%;
+                width:80%;
+                margin:auto;
+                margin-top:10%;
+                background-color:var(--foreground-obj-bgc);
+                padding:20px;
+                border-radius:25px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, .6);
+                display:flex;
+                flex-direction:row;
+            }
+
+            .transactionLog {
+                flex:1;
+                width:20%;
+                float:left;
+                margin:auto;
+                border-radius:10px;
+                padding:3px;
+                border:2px solid var(--foreground-obj-border)
+            }
+
+            .transactionObject:hover, .transactionObject:focus {
+                background-color:var(--hover);
+                border:1px solid var(--foreground-obj-border)
+            }
+
+            .transactionModal {
+                display:none;
+                width:20%;
+                margin:auto;
+                background-color:var(--foreground-obj-bgc);
+                box-shadow: 0 2px 5px rgba(0, 0, 0, .6);
+                padding:20px;
+                border-radius:25px;
+            }
+
+            .transactionObject {
+                border-radius:4px;
+                border:1px solid rbga(0,0,0,1)
+            }
+
+            .balanceContainer {
+                flex:2;
+                width:10%;
+                margin:auto;
+            }
+
+            .close {
+                cursor:pointer;
+            }
+
+            .openner {
+                cursor:pointer;
+                width:100%;
+                height:100%;
+            }
+
+            .diag {
+                margin:2%;
+                border:2px solid var(--foreground-obj-border);
+                padding:6px;
+                border-radius:4px;
+            }
+
+            input {
+                appearance: textfield;
+                -webkit-appearance: textfield;
+                -moz-appearance: textfield;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                margin:2px;
+            }
+
+            input[type='submit'] {
+                border-radius:27px;
+                border:none;
+                background:#1ec677;
+                padding: 10px 40px 10px 40px;
+                margin-left:10%;
+                cursor:pointer;
+            }
+
+            input[type='submit']:hover {
+                background:#4bc38b;
+            }
+
+            ::placeholder {
+                font-size: 14px;
+                position: absolute;
+                top: 8px;
+                left: 12px;
+                transition: all 0.3s ease-in-out;
+            }
+
+            input:focus::placeholder {
+                font-size: 12px;
+                top: 0;
+            }
+
+         </style>
+    </head>
+    <body>
+        <div class="MainWrapper">
+
+            <div class="transactionLog">
+
+                <h1>Transactions</h1>
+                <hr>
+
+                {% for i in transactions_outgoing %}
+                    <div class="transactionObject">
+                        <span class="opener" id="{{ i.id }}" onclick="openner({{i.id}})"> {# ignore this error #}
+                            <h2>Outgoing: ${{ i.ammount }}</h2>
+                            <p>To (User ID): {{ i.acctId_to }}</p>
+                        </span> 
+                        
+                    </div>
+                {% endfor %}
+
+                {% for i in transactions_incoming %}
+                    <div class="transactionObject">
+                        <span class="opener" id="{{ i.id }}" onclick="openner({{i.id}})"> {# ignore this error #}
+                            <h2>Incoming: ${{ i.ammount }}</h2>
+                            <p>From (User ID): {{ i.acctId_to }}</p>
+                        </span>  
+                        
+                    </div>
+                {% endfor %}
+
+            </div>
+
+            
+
+            <script>
+
+
+                function openner(id) {
+                    const modal = document.querySelector("#transactionModalObject_id"+id);
+
+                    if (!modal) {
+                        console.log("unable to find modal that matches this transaction's ID, try reloading the page");
+                    } else {
+                        modal.style.display = "block";
+                    };
+
+                    
+
+                };
+            </script>
+
+            <div class="balanceContainer">
+                <h1 style="margin:2px;margin-top:4px;">Balance: {{ account.balance }}</h1>
+            </div>
+
+            <div class="diag">
+
+                <h2 style="margin:2px;">Deposit</h2>
+                <hr>
+
+                <form action="{% url 'manage:deposit' %}" method="POST">
+                    {% csrf_token %}
+
+                    <input type="hidden" name="account_id" value="{{ account.id }}">
+
+                    <div class="TextInputField" id="inputField_amount">
+                        <input type="number" name="amount" placeholder="Amount:">
+                    </div>
+
+                    <div class="TextInputField" id="InputField_description">
+                        <input type="text" name="description" placeholder="Description:">
+                    </div>
+
+                    <div class="btn" id="btn_submit">
+                        <input type="submit">
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="diag">
+
+                <h2 style="margin:2px;">Withdrawal</h2>
+                <hr>
+
+                <form action="{% url 'manage:withdrawal' %}" method="POST">
+                    {% csrf_token %}
+
+                    <input type="hidden" name="account_id" value="{{ account.id }}">
+
+                    <div class="TextInputField" id="inputField_amount">
+                        <input type="number" name="amount" placeholder="Amount:">
+                    </div>
+
+                    <div class="textInputField" id="inputField_description">
+                        <input type="text" name="description" placeholder="Description:">
+                    </div>
+
+                    <div class="btn" id="btn_submit">
+                        <input type="submit">
+                    </div>
+
+                </form>
+            </div>
+
+            
+        </div>
+
+        
+
+        <div class="transactionModalsWrapper">
+            {% for i in transactions_outgoing %}
+
+                <div class="transactionModal" id="transactionModalObject_id{{ i.id }}">
+                    <span class="close" onclick="closeModal({{i.id}})">&times;</span>
+                    <h2>Outgoing: {{ i.amount }}</h2>
+                    <p> Date: {{ i.date }} </p>
+                    <p> To: {{ i.acctId_to }} </p>
+                    <p> Decription: {{ i.description }}</p>
+                </div>
+
+            {% endfor %}
+
+            {% for i in transactions_incoming %}
+
+                <div class="transactionModal" id="transactionModalObject_id{{ i.id }}">
+                    <span class="close" onclick="closeModal({{i.id}})">&times;</span>
+                    <h2>Incoming: {{ i.amount }}</h2>
+                    <p> Date: {{ i.date }} </p>
+                    <p> From: {{ i.acctId_from }} </p>
+                    <p> Decription: {{ i.description }}</p>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+        <script>
+            function closeModal(id) {
+                var modalObject = document.querySelector("#transactionModalObject_id" + id);
+
+                if (!modalObject) {
+                    console.log("Unable to find modal object with that ID.");
+                } else {
+                    modalObject.style.display = "none";
+                }
+            };
+
+
+        </script>
+
+    </body>
+
+</html>
