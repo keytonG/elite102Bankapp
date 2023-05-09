@@ -19,7 +19,7 @@
   - Open <code>settings.py</code>
   - Find the <code>DATABASES</code> dictionary and change the following values from <code>'default</code>:
       - <code>ENGINE</code>: Don't change this unless you know what you're doing!
-      - <code>NAME</code>: Change to your desired schema name (Don't make a schema, Django will handle that later)
+      - <code>NAME</code>: Change to your desired schema name (This will need to match up with an existing schema)
       - <code>USER</code>: Change to the username of your MySQL root user
       - <code>PASSWORD</code>: Change to the password the afforementioned user
       - <code>URL</code>: Change to the IP that your MySQL server is hosted on. This default should work, but if it doesn't, try: <code>localhost</code> or <code>0.0.0.0</code>
