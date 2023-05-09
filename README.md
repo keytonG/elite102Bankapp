@@ -30,17 +30,16 @@
   - Run the following command -- These commands are similar to committing changes to a github repo:
       - Windows: <code>py manage.py makemigrations</code>
       - Mac: <code>python manage.py makemigrations</code>
-      - If these don't work, ensure you've set up your virtual environment properly, and that you have an active MySQL server open.
 
   - Run the following command -- These commands are similar to pushing changes to a github repo:
-			- Windows: <code>py manage.py migrate</code>
-			- Mac: <code>python manage.py migrate</code>
+	- Windows: <code>py manage.py migrate</code>
+	- Mac: <code>python manage.py migrate</code>
 
-	- Run the server:
-			- Windows: <code>py manage.py runserver</code>
-			- Mac: <code>python manage.py runserver</code>
+  - Run the server:
+	- Windows: <code>py manage.py runserver</code>
+	- Mac: <code>python manage.py runserver</code>
 	
-	- Access the web server:
-			- Open any browser and go to <code>127.0.0.1:8000</code>
+  - Access the web server:
+	- Open any browser and go to <code>127.0.0.1:8000</code>
 
-	- You're running the app!
+  - You're running the app!
