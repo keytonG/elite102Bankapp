@@ -2,7 +2,7 @@
 
   - Create a virtual environment
   - Download the code
-  - Navigate to <code>/elite102Bankapp/</codecode>
+  - Navigate to <code>/elite102Bankapp/</code>
   - Run the following command:
       - Windows: <code>py -m venv .venv</code>
       - Mac: <code>python -m venv .venv</code>
