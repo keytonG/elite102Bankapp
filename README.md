@@ -1,6 +1,5 @@
 # Installation Guide
 
-  - Create a virtual environment
   - Download the code
   - Navigate to <code>/elite102Bankapp/</code>
   - Run the following command:
